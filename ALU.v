@@ -6,9 +6,9 @@ module ALU(
 	input [3:0] control,
 
 	output Z,
-	output N, //Only the negative flag is implemented
-	output C,
-	output V,
+	output N, 
+	output C, //Not implemented
+	output V, //Not implemented
 	output [31:0] result
 );
 
@@ -28,26 +28,32 @@ always @* begin
 		0 : begin
 			result <= dat1 + dat2;
 			N <= (result[31] == 1) ? 1: 0;
+			Z <= (result == 0) ? 1: 0;
 		end
 		1 : begin
 			result <= dat1 - dat2;
 			N <= (result[31] == 1) ? 1: 0;
+			Z <= (result == 0) ? 1: 0;
 		end
 		2 : begin
 			result <= dat1 * dat2;
 			N <= (result[31] == 1) ? 1: 0;
+			Z <= (result == 0) ? 1: 0;
 		end
 		3 : begin
 			result <= dat1 | dat2;
 			N <= (result[31] == 1) ? 1: 0;
+			Z <= (result == 0) ? 1: 0;
 		end
 		4 : begin
 			result <= dat1 << dat2;
 			N <= (result[31] == 1) ? 1: 0;
+			Z <= (result == 0) ? 1: 0;
 		end
 		5 : begin
 			result <= dat1 >> dat2;
 			N <= (result[31] == 1) ? 1: 0;
+			Z <= (result == 0) ? 1: 0;
 		end
 		default : result <= -1;
 	endcase;
