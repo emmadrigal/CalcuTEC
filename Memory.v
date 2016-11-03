@@ -5,7 +5,6 @@ module Memory(
 	address     , // Address Input
 	data        , // Data
 	input we          , // Write Enable
-	input re          , // Read Enable
 	data_out     // Output Enable
 );
 
@@ -35,8 +34,7 @@ end
 
 // Memory Read Block 
 always @ (negedge clk) begin
-	if (re)
-		data_out = mem[address];
+	data_out = mem[address];
 end
 
 endmodule // End of Module ram_sp_sr_sw

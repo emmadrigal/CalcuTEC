@@ -4,6 +4,8 @@ module ALU(
 	input [31:0] dat1,
 	input [31:0] dat2,
 	input [3:0] control,
+	
+	input set,
 
 	output Z,
 	output N, 
@@ -27,36 +29,28 @@ always @* begin
 	case(control)
 		0 : begin
 			result <= dat1 + dat2;
-			N <= (result[31] == 1) ? 1: 0;
-			Z <= (result == 0) ? 1: 0;
 		end
 		1 : begin
 			result <= dat1 - dat2;
-			N <= (result[31] == 1) ? 1: 0;
-			Z <= (result == 0) ? 1: 0;
 		end
 		2 : begin
 			result <= dat1 * dat2;
-			N <= (result[31] == 1) ? 1: 0;
-			Z <= (result == 0) ? 1: 0;
 		end
 		3 : begin
 			result <= dat1 | dat2;
-			N <= (result[31] == 1) ? 1: 0;
-			Z <= (result == 0) ? 1: 0;
 		end
 		4 : begin
 			result <= dat1 << dat2;
-			N <= (result[31] == 1) ? 1: 0;
-			Z <= (result == 0) ? 1: 0;
 		end
 		5 : begin
 			result <= dat1 >> dat2;
-			N <= (result[31] == 1) ? 1: 0;
-			Z <= (result == 0) ? 1: 0;
 		end
 		default : result <= -1;
 	endcase;
+	if(set) begin
+		N <= (result[31] == 1) ? 1: 0;
+		Z <= (result == 0) ? 1: 0;
+	end
 end
 
 

@@ -2,7 +2,6 @@
 
 module Registers(
 input clk,
-input reg_read,
 input reg_write,
 input [3:0] dirA,
 input [3:0] dirB,
@@ -17,10 +16,8 @@ output [31:0] datB
 reg [32:0] regs [0:3];
 	 
 always @(posedge clk) begin 
-	if(reg_read) begin
 		datA = regs[dirA];
 		datB = regs[dirB];
-	end
 end
 
 always @(negedge clk) begin 
