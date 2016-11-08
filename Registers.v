@@ -8,8 +8,8 @@ input [3:0] dirB,
 input [3:0] dir_WR,
 input [31:0] data_in,
 
-output [31:0] datA,
-output [31:0] datB
+output reg [31:0] datA,
+output reg [31:0] datB
     );
 	 
 //Local variables
@@ -22,7 +22,7 @@ end
 
 always @(negedge clk) begin 
 	if(reg_write) begin
-		regs[dir_WR] = data;
+		regs[dir_WR] = data_in;
 	end
 end
 

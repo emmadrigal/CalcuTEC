@@ -3,7 +3,7 @@
 module PC_register(
 	input clk,
 	input [31:0] dir_in,
-	output [31:0] dir_out
+	output reg [31:0] dir_out
 );
 	 
 reg [31:0] PC;

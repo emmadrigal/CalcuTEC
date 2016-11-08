@@ -7,11 +7,11 @@ module ALU(
 	
 	input set,
 
-	output Z,
-	output N, 
-	output C, //Not implemented
-	output V, //Not implemented
-	output [31:0] result
+	output reg Z,
+	output reg N, 
+	output reg C, //Not implemented
+	output reg V, //Not implemented
+	output reg [31:0] result
 );
 
 /*
@@ -28,28 +28,28 @@ module ALU(
 always @* begin
 	case(control)
 		0 : begin
-			result <= dat1 + dat2;
+			result = dat1 + dat2;
 		end
 		1 : begin
-			result <= dat1 - dat2;
+			result = dat1 - dat2;
 		end
 		2 : begin
-			result <= dat1 * dat2;
+			result = dat1 * dat2;
 		end
 		3 : begin
-			result <= dat1 | dat2;
+			result = dat1 | dat2;
 		end
 		4 : begin
-			result <= dat1 << dat2;
+			result = dat1 << dat2;
 		end
 		5 : begin
-			result <= dat1 >> dat2;
+			result = dat1 >> dat2;
 		end
-		default : result <= -1;
+		default : result = -1;
 	endcase;
 	if(set) begin
-		N <= (result[31] == 1) ? 1: 0;
-		Z <= (result == 0) ? 1: 0;
+		N = (result[31] == 1) ? 1: 0;
+		Z = (result == 0) ? 1: 0;
 	end
 end
 

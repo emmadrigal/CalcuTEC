@@ -4,7 +4,7 @@ module Mux2x1(
 input port_select,
 input [31:0] dat1,
 input [31:0] dat2,
-output [31:0] data_out
+output reg [31:0] data_out
     );
 	 
 	 
