@@ -1,0 +1,138 @@
+`timescale 1ns / 1ps
+
+////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer:
+//
+// Create Date:   19:48:52 11/08/2016
+// Design Name:   Memory
+// Module Name:   C:/Users/emmam/Documents/CalcuTEC/memoryTest.v
+// Project Name:  CalcuTEC
+// Target Device:  
+// Tool versions:  
+// Description: 
+//
+// Verilog Test Fixture created by ISE for module: Memory
+//
+// Dependencies:
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+////////////////////////////////////////////////////////////////////////////////
+
+module memoryTest;
+
+	// Inputs
+	reg clk;
+	reg [7:0] address;
+	reg [31:0] data;
+	reg we;
+
+	// Outputs
+	wire [31:0] data_out;
+
+	// Instantiate the Unit Under Test (UUT)
+	Memory uut (
+		.clk(clk), 
+		.address(address), 
+		.data(data), 
+		.we(we), 
+		.data_out(data_out)
+	);
+
+	initial begin
+		// Initialize Inputs
+		clk = 0;
+		address = 0;
+		data = 0;
+		we = 0;
+
+		// Wait 100 ns for global reset to finish
+		#100;
+        
+		// Add stimulus here
+		#10; clk = 1; address = 0; data = 1; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 1; data = 10; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 2; data = 100; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 3; data = 1000; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 4; data = 10000; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 5; data = 100000; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 6; data = 1000000; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 7; data = 10000000; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 0; data = 0; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 1; data = 15; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 2; data = 31; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 3; data = 63; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 4; data = 127; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 5; data = 255; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 6; data = 511; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 7; data = 1023; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 0; data = 0; we = 0;
+		#10; clk = 0;
+		#10; clk = 1; address = 5; data = 102; we = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 0; data = 0; we = 0;
+		#10; clk = 0;
+		#10; clk = 1;
+		#10; clk = 0;
+		#10; clk = 1; address = 5; data = 0; we = 0;
+		#10; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+		#5; clk = 1;
+		#5; clk = 0;
+
+	end
+      
+endmodule
+

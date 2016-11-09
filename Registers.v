@@ -8,22 +8,19 @@ input [3:0] dirB,
 input [3:0] dir_WR,
 input [31:0] data_in,
 
-output reg [31:0] datA,
-output reg [31:0] datB
+output wire [31:0] datA,
+output wire [31:0] datB
     );
 	 
 //Local variables
-reg [32:0] regs [0:3];
+reg [32:0] regs [0:15];
 	 
-always @(posedge clk) begin 
-		datA = regs[dirA];
-		datB = regs[dirB];
-end
+assign datA = regs[dirA];
+assign datB = regs[dirB];
 
 always @(negedge clk) begin 
-	if(reg_write) begin
+	if(reg_write)
 		regs[dir_WR] = data_in;
-	end
 end
 
 

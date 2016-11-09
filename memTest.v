@@ -8,6 +8,7 @@ module memTest;
 	reg [31:0]  data;
 	reg we;
 	reg [31:0] data_out;
+	reg oe;
 
 	// Instantiate the Unit Under Test (UUT)
 	Memory uut (
@@ -15,7 +16,8 @@ module memTest;
 		.address(address), 
 		.data(data), 
 		.we(we), 
-		.data_out(data_out)
+		.data_out(data_out),
+		.oe(oe)
 	);
 
 	initial begin
@@ -24,7 +26,6 @@ module memTest;
 		address = 0;
 		data = 0;
 		we = 0;
-		data_out = 0;
 
 		// Wait 100 ns for global reset to finish
 		#100;
