@@ -3,7 +3,7 @@
 module ALU(
 	input [31:0] dat1,
 	input [31:0] dat2,
-	input [3:0] control,
+	input [2:0] control,
 	
 	input set,
 

@@ -1,25 +1,59 @@
 `timescale 1ns / 1ps
 
 module ARMProcessor(
-input clk,
+	input clk,
 
-output mem_out
+	//Usado para escribir instrucciones en la memoria
+	input write_ins,
+	input [4:0] ins_address,
+	input [31:0] ins,
+
+	//Usado para obtener un dato de la memoria
+	input [4:0] result_add,
+	output wire [31:0] resultado_out
+);
+	 
+
+
+wire [31:0] new_PC;
+wire [31:0] pc_in;
+wire sel_PC;
+wire [31:0] cuatro = 1;
+wire [31:0] pcPlusEight;
+wire [31:0] immediate;
+
+sumador pcMasOcho(
+	.A(pc_in),
+	.B(cuatro),
+	.resultado(pcPlusEight)
+);
+
+wire [31:0] pcJump;
+
+sumador pcMasOchoMasBranch(
+	.A(pcPlusEight),
+	.B(immediate),
+	.resultado(pcJump)
+);
+
+
+Mux2x1 mux_PC (
+    .port_select(sel_PC), 
+    .dat1(pc_in), 
+    .dat2(pcJump), 
+    .data_out(new_PC)
     );
 	 
-
-	 
 wire [31:0] pc_out;
-wire [31:0] pc_in;
+
 	 
 PC_register PC(
     .clk(clk), 
-    .dir_in(pc_in), 
+    .dir_in(new_PC), 
     .dir_out(pc_out)
 );
 
-wire [31:0] cuatro = 4;
-
-sumador sum(
+sumador pcMasCuatro(
 	.A(pc_out),
 	.B(cuatro),
 	.resultado(pc_in)
@@ -30,7 +64,11 @@ wire [31:0] intruccion;
 Memory instrucciones (
     .clk(clk), 
     .address(pc_out),
-    .data_out(intruccion)
+    .data_out(intruccion),
+	 
+	.write_ins(write_ins),
+	.ins_address(ins_address),
+	.ins(ins)
 );
 
 wire dirA_mux_select;
@@ -46,9 +84,10 @@ wire [2:0] ALU_ctrl;
 wire [3:0] ALU_flags;
 
 Control nube_control (
+	 .clk(clk),
     .cond(intruccion[31:28]), 
     .op(intruccion[27:26]), 
-    .funct(intruccion[25:21]), 
+    .funct(intruccion[25:20]), 
     .sh(intruccion[6:5]), 
     .ALU_flags(ALU_flags), 
 	 
@@ -65,7 +104,7 @@ Control nube_control (
     );
 	 
 
-wire [4:0] A;
+wire [3:0] A;
 
 	 
 Mux2x1 dirA_mux (
@@ -76,7 +115,7 @@ Mux2x1 dirA_mux (
     );
 	 
 	 
-wire [4:0] WB;
+wire [3:0] WB;
 
 Mux2x1 dirWB_mux (
     .port_select(dirWB_mux_select), 
@@ -85,8 +124,9 @@ Mux2x1 dirWB_mux (
     .data_out(WB)
     );
 	 
-wire [4:0] ALU_A;
+wire [31:0] ALU_A;
 wire [31:0] WB_data;
+wire [31:0] datB;
 
 Registers registros (
     .clk(clk), 
@@ -98,8 +138,7 @@ Registers registros (
     .datA(ALU_A), 
     .datB(datB)
     );
-	 
-wire [31:0] immediate;
+	
 	 
 RotImm extension(
     .immediate(intruccion[23:0]), 
@@ -107,7 +146,7 @@ RotImm extension(
     .data(immediate)
     );
 	 
-wire [4:0] ALU_B;
+wire [31:0] ALU_B;
  
 Mux2x1 datB_mux (
     .port_select(datB_mux_select), 
@@ -137,7 +176,9 @@ Memory datos(
     .address(result), 
     .data(datB), 
     .we(mem_wr), 
-    .data_out(mem_out)
+    .data_out(mem_out),
+	 .result_add(result_add),
+	 .resultado_out(resultado_out)
     );
 
 Mux2x1 datWB (

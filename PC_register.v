@@ -7,8 +7,14 @@ module PC_register(
 );
 	 
 reg [31:0] PC;
+
+reg start = 0;
 	 
 always @(posedge clk) begin 
+	if(!start) begin
+		PC = 0;
+		start = 1;
+	end
 	dir_out = PC;
 end
 

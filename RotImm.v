@@ -38,7 +38,7 @@ case(imm_src)
 		endcase
 	end
 	1 			: data = {20'b00000000000000000000 ,immediate[11:0]}; //Extention for memory
-	2 			: data = {{6{immediate[23]}}, immediate, 2'b00}; //Extention for branch
+	2 			: data = {{8{immediate[23]}}, immediate}; //Extention for branch, No se alinea dado que la memoria los saltos son 1 en 1
 	default  : data = -1;
 endcase
 

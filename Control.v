@@ -1,6 +1,7 @@
 `timescale 1ns / 1ps
 
 module Control(
+input clk,
 input [3:0] cond,
 input [1:0] op,
 input [5:0] funct,
@@ -20,6 +21,8 @@ output reg sel_dest,
 output reg [2:0] ALU_ctrl
     );
 	 
+	 
+reg [3:0] flags_alu;
 
 	 
 reg enable;
@@ -27,46 +30,46 @@ reg enable;
 always @* begin
 	case(cond)
 		0 : begin//Z
-			enable = ALU_flags[0];
+			enable = flags_alu[0];
 		end
 		1 : begin//~Z
-			enable = ~ALU_flags[0];
+			enable = ~flags_alu[0];
 		end
 		2 : begin//C
-			enable = ALU_flags[2];
+			enable = flags_alu[2];
 		end
 		3 : begin//~C
-			enable = ~ALU_flags[2];
+			enable = ~flags_alu[2];
 		end
 		4 : begin//N
-			enable = ALU_flags[1];
+			enable = flags_alu[1];
 		end
 		5 : begin//~N
-			enable = ~ALU_flags[1];
+			enable = ~flags_alu[1];
 		end
 		6 : begin//V
-			enable = ALU_flags[3];
+			enable = flags_alu[3];
 		end
 		7 : begin//~V
-			enable = ~ALU_flags[3];
+			enable = ~flags_alu[3];
 		end
 		8 : begin//~ZC
-			enable = ~ALU_flags[0] & ALU_flags[2];
+			enable = ~flags_alu[0] & flags_alu[2];
 		end
 		9 : begin// Z | ~C
-			enable = ALU_flags[0] | ~ALU_flags[2];
+			enable = flags_alu[0] | ~flags_alu[2];
 		end
 		10 : begin//~(N xor V)
-			enable = ~(ALU_flags[1] ^ALU_flags[3]);
+			enable = ~(flags_alu[1] ^flags_alu[3]);
 		end
 		11 : begin//N xor V
-			enable = ALU_flags[1] ^ALU_flags[3];
+			enable = flags_alu[1] ^flags_alu[3];
 		end
 		12 : begin// ~Z ~(N xor V)
-			enable =  ~ALU_flags[0] & ~(ALU_flags[1] ^ALU_flags[3]);
+			enable =  ~flags_alu[0] & ~(flags_alu[1] ^flags_alu[3]);
 		end
 		13 : begin// Z | (N xor V)
-			enable = ALU_flags[0] & (ALU_flags[1] ^ALU_flags[3]);
+			enable = flags_alu[0] & (flags_alu[1] ^flags_alu[3]);
 		end
 		default : begin //Always
 			enable = 1;
@@ -131,7 +134,7 @@ always @* begin
 				sel_dest = 1;//Selecciona la dirección de WB
 				ALU_ctrl = 0;//realice una suma en la ALU
 				sel_WB = 0;//Seleccionar salida de la memoria
-				if(funct[2] == 1)
+				if(funct[2] == 0)
 					if(funct[0] == 0) begin//STR
 						reg_wr = 0;//No se debe escribir
 						mem_wr =  1;//Se escribe en memoria
@@ -161,7 +164,10 @@ always @* begin
 			end
 		endcase
 	end
+end
 
+always @(negedge clk) begin
+	flags_alu <= ALU_flags;
 end
 
 
