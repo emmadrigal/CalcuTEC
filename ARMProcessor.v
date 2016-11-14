@@ -2,6 +2,7 @@
 
 module ARMProcessor(
 	input clk,
+	input reset,
 
 	//Usado para escribir instrucciones en la memoria
 	input write_ins,
@@ -9,7 +10,6 @@ module ARMProcessor(
 	input [31:0] ins,
 
 	//Usado para obtener un dato de la memoria
-	input [4:0] result_add,
 	output wire [31:0] resultado_out
 );
 	 
@@ -48,7 +48,8 @@ wire [31:0] pc_out;
 
 	 
 PC_register PC(
-    .clk(clk), 
+    .clk(clk),
+	 .reset(reset),
     .dir_in(new_PC), 
     .dir_out(pc_out)
 );
@@ -91,14 +92,12 @@ Control nube_control (
     .sh(intruccion[6:5]), 
     .ALU_flags(ALU_flags), 
 	 
+	 .sel_B(datB_mux_select),
     .ALU_set(ALU_set), 
-    .sel_PC(sel_PC), //Falta
+    .sel_PC(sel_PC),
     .sel_dirA(dirA_mux_select), 
     .imm_src(imm_src), 
-    .reg_wr(reg_wr), 
-    .sel_B(datB_mux_select), 
-    .mem_wr(mem_wr), 
-    .sel_WB(datWB_select), 
+    .reg_wr(reg_wr),
     .sel_dest(dirWB_mux_select), 
     .ALU_ctrl(ALU_ctrl)
     );
@@ -136,7 +135,8 @@ Registers registros (
     .dir_WR(WB), 
     .data_in(WB_data), 
     .datA(ALU_A), 
-    .datB(datB)
+    .datB(datB),
+	 .resultadoFinal(resultado_out)
     );
 	
 	 
@@ -155,7 +155,6 @@ Mux2x1 datB_mux (
     .data_out(ALU_B)
     );
 
-wire [31:0] result;
 
 ALU alu (
     .dat1(ALU_A), 
@@ -166,26 +165,8 @@ ALU alu (
     .N(ALU_flags[1]), 
     .C(ALU_flags[2]), 
     .V(ALU_flags[3]), 
-    .result(result)
+    .result(WB_data)
 );
 
-wire [31:0] mem_out;
-
-Memory datos(
-    .clk(clk), 
-    .address(result), 
-    .data(datB), 
-    .we(mem_wr), 
-    .data_out(mem_out),
-	 .result_add(result_add),
-	 .resultado_out(resultado_out)
-    );
-
-Mux2x1 datWB (
-    .port_select(datWB_select), 
-    .dat1(result), 
-    .dat2(mem_out), 
-    .data_out(WB_data)
-    );
 
 endmodule

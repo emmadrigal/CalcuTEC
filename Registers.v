@@ -9,12 +9,15 @@ input [3:0] dir_WR,
 input [31:0] data_in,
 
 output wire [31:0] datA,
-output wire [31:0] datB
+output wire [31:0] datB,
+
+output wire [31:0] resultadoFinal
     );
 	 
 	 
 assign datA = regs[dirA];
 assign datB = regs[dirB];
+assign resultadoFinal = regs[15];
 
 //Local variables
 reg [32:0] regs [0:15];

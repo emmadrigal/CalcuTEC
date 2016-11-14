@@ -12,10 +12,7 @@ module Memory(
 	//Usado para escribir a la memoria de instrucciones antes de ejecutar una instrucción
 	input write_ins,
 	input [4:0] ins_address,
-	input [31:0] ins,
-	//Usado para leer la respuesta
-	input [4:0] result_add,
-	output wire [31:0] resultado_out
+	input [31:0] ins
 );
 
 //Variables
@@ -31,8 +28,6 @@ always @ (negedge clk) begin
 		mem[address] <= data;
 end
 
-//Usado para leer el resultado final
-assign resultado_out = mem[result_add];
 //Usado para escribir instrucciones
 always @(posedge write_ins) begin
 	mem[ins_address] <= ins;
