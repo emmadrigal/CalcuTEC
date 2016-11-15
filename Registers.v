@@ -20,7 +20,7 @@ assign datB = regs[dirB];
 assign resultadoFinal = regs[15];
 
 //Local variables
-reg [32:0] regs [0:15];
+reg [31:0] regs [0:15];
 	 
 
 initial begin

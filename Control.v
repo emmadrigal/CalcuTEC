@@ -82,7 +82,6 @@ always @* begin
 				imm_src <= 0;//es una extensión de procesamiento de datos
 				sel_PC <=  0;//No hay salto
 				sel_B <= (funct[5] == 1) ? 1: 0;//Checkea si la instrucción es inmediata o no
-				sel_dest <= 0;
 				case(funct[4:1])
 					0: begin //Funcion de AND no fue implementada, sino esto se debe cambiar
 						sel_dirA <= 1;
@@ -92,19 +91,23 @@ always @* begin
 					end
 					end
 					2: begin//SUB
-						sel_dirA <= 0;
+						sel_dest <= 1;
+						sel_dirA <= 1;
 						ALU_ctrl <= 1;
 					end
 					4: begin//ADD
-						sel_dirA <= 0;
+						sel_dest <= 1;
+						sel_dirA <= 1;
 						ALU_ctrl <= 0;
 					end
 					12:begin//OR
-						sel_dirA <= 0;
+						sel_dest <= 1;
+						sel_dirA <= 1;
 						ALU_ctrl <= 3;
 					end
 					13:begin//Shifts
-						sel_dirA <= 0;
+						sel_dest <= 1;
+						sel_dirA <= 1;
 						case(sh)
 							 0:begin//LSL
 								ALU_ctrl <= 4;
@@ -143,6 +146,10 @@ always @* begin
 				reg_wr <= 0;//No se debe escribir en los registros
 			end
 		endcase
+	end
+	else begin 
+		sel_PC <=  0;//Puede hay salto
+		reg_wr <= 0;//No se debe escribir en los registros
 	end
 end
 
