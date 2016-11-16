@@ -62,4 +62,5 @@ pixel_Gen pixels (
     .segundonumero(segundonumero)
     );
 
+
 endmodule

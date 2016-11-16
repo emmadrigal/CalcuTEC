@@ -2,41 +2,36 @@
 
 module Memory(
 	input clk         , // Clock Input
-	address     , // Address Input
-	data        , // Data
+	input [4:0] address     , // Address Input
+	input [31:0] data        , // Data
 	input we          , // Write Enable
-	input re          , // Read Enable
-	data_out     // Output Enable
+	
+	
+	output wire [31:0] data_out,     //Output data
+	
+	//Usado para escribir a la memoria de instrucciones antes de ejecutar una instrucción
+	input write_ins,
+	input [4:0] ins_address,
+	input [31:0] ins
 );
 
-
-parameter DATA_WIDTH = 32;
-parameter ADDR_WIDTH = 8 ;
-parameter RAM_DEPTH = 1 << ADDR_WIDTH;
-
-//Address Ports
-input [ADDR_WIDTH-1:0] address;
-
-//Data Ports
-input [DATA_WIDTH-1:0]  data;
-output [DATA_WIDTH-1:0] data_out;
-
 //Variables
-reg [DATA_WIDTH-1:0] mem [0:RAM_DEPTH-1];
+reg [31:0] mem [0:31];
 
-
+// Memory Read Block 
+assign data_out = mem[address];
 
 // Memory Write Block 
 // Write Operation : When we = 1, cs = 1
-always @ (posedge clk) begin
-	if (we)
-		mem[address] = data;
-end
-
-// Memory Read Block 
 always @ (negedge clk) begin
-	if (re)
-		data_out = mem[address];
+	if (we)
+		mem[address] <= data;
 end
 
-endmodule // End of Module ram_sp_sr_sw
+//Usado para escribir instrucciones
+always @(posedge write_ins) begin
+	mem[ins_address] <= ins;
+end
+
+
+endmodule
