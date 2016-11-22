@@ -17,6 +17,8 @@ wire [9:0] px_reg;
 wire [9:0] py_reg;
 wire mouseclick2;
 
+wire [6:0] que_dibujar;
+wire [6:0] que_simbolo;
 // signal declaration
 wire video_on, pixel_tick;
 wire enable;
@@ -46,20 +48,27 @@ vga_sync sincronizar (
     .pixel_y(pixel_y)
     );
 
+// Instantiate the module
+calculogic logicacal (
+    .clk(clk), 
+    .mousex(px_reg), 
+    .mousey(py_reg), 
+    .mouseclick(mouseclick2), 
+    .que_dibujar(que_dibujar),
+	 .que_simbolo(que_simbolo)
+    );
+
 //controlador del vga
 pixel_Gen pixels (
     .mousex(px_reg), 
     .mousey(py_reg), 
-	 .mouseclick(mouseclick2),
     .pixel_tick(pixel_tick), 
     .pixel_x(pixel_x), 
     .pixel_y(pixel_y), 
     .video_on(video_on), 
-	 .aluresultado(29),
-    .rgb(RGB),
-	 .primernumero(primernumero), 
-    .signo(signo), 
-    .segundonumero(segundonumero)
+    .dibujar(que_dibujar), 
+    .signo(que_simbolo), 
+    .rgb(RGB)
     );
 
 
